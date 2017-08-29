@@ -1,7 +1,6 @@
 #include <math.h>
 #define M_PI 3.14159265358979323846
 
-/* prism.h        */
 /*Lista de vertices:  */
 GLfloat vert[][3]=
 {
@@ -49,6 +48,20 @@ void Poligono(GLint *p)
         glVertex3fv(vert[p[i]]);
     glEnd();
 }
+
+void circulo(GLfloat red, GLfloat green, GLfloat blue, GLfloat x, GLfloat y,
+		GLfloat z, GLfloat radius) {
+
+	glColor3f(red,green,blue);
+	glBegin(GL_LINE_LOOP);
+	int i;
+	for(i=0;i<100;i++)
+		glVertex3d(x + (radius * cos(i * 2.0 * M_PI / 100)),
+				y + (radius * sin(i * 2.0 * M_PI / 100)),
+				z - (radius * cos(i * 2.0 * M_PI / 100)));
+	glEnd();
+}
+
 void semaforo(void)
 {
     int i;
@@ -57,29 +70,14 @@ void semaforo(void)
 
     GLfloat x = 0.5, y = 4.0 + (4.0/6.0), z = 0.5, radius = 4.0/9.0;
 
-    glColor3f(0.0,1.0,0.0);
-    glBegin(GL_LINE_LOOP);
-    for(i=0;i<100;i++)
-    	glVertex3d(x + (radius * cos(i * 2.0 * M_PI / 100)),
-    			y + (radius * sin(i * 2.0 * M_PI / 100)),
-				z - (radius * cos(i * 2.0 * M_PI / 100)));
-    glEnd();
+    // semaforo verde
+    circulo(0.0,1.0,0.0,x,y,z,radius);
 
-    glColor3f(1.0,1.0,0.0);
-    glBegin(GL_LINE_LOOP);
-    for(i=0;i<100;i++)
-            glVertex3d(x + (radius * cos(i * 2.0 * M_PI / 100)),
-            		y + (4.0/3.0) + (radius * sin(i * 2.0 * M_PI / 100)),
-        			z - (radius * cos(i * 2.0 * M_PI / 100)));
-    glEnd();
+    // semaforo amarelo
+    circulo(1.0,1.0,0.0,x,y + (4.0/3.0),z,radius);
 
-    glColor3f(1.0,0.0,0.0);
-    glBegin(GL_LINE_LOOP);
-    for(i=0;i<100;i++)
-            glVertex3d(x + (radius * cos(i * 2.0 * M_PI / 100)),
-            		y + (8.0/3.0) + (radius * sin(i * 2.0 * M_PI / 100)),
-        			z - (radius * cos(i * 2.0 * M_PI / 100)));
-    glEnd();
+    // semaforo vermelho
+    circulo(1.0,0.0,0.0,x,y + (8.0/3.0),z,radius);
 }
 void sistCoord(void)
 {
