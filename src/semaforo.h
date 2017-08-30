@@ -1,7 +1,9 @@
-
 #include <math.h>
 #define M_PI 3.14159265358979323846
 
+int redOn = 0;
+int yellowOn = 0;
+int greenOn = 0;
 /*Lista de vertices:  */
 GLfloat vert[][3]=
 {
@@ -56,7 +58,6 @@ void circulo(GLfloat red, GLfloat green, GLfloat blue, GLfloat x, GLfloat y,
 	glColor3f(red,green,blue);
 	glBegin(GL_TRIANGLE_FAN);
 	int i;
-	int j;
 
         for(i=0;i<100;i++)
             glVertex3d(x + (radius * cos(i * 2.0 * M_PI / 100)) ,
@@ -77,11 +78,20 @@ void semaforo(void)
     GLfloat x = 0.5, y = 4.0 + (4.0/6.0), z = 0.5, radius = 4.0/9.0;
 
     // semaforo verde
-    circulo(0.0,1.0,0.0,x,y,z,radius);
+    if (greenOn)
+		circulo(0.0,1.0,0.0,x,y,z,radius);
+	else 
+		circulo(0.0,0.5,0.0,x,y,z,radius);
     // semaforo amarelo
-    circulo(1.0,1.0,0.0,x,y + (4.0/3.0),z,radius);
+    if (yellowOn)
+		circulo(1.0,1.0,0.0,x,y + (4.0/3.0),z,radius);
+	else
+		circulo(0.5,0.5,0.0,x,y + (4.0/3.0),z,radius);
     // semaforo vermelho
-    circulo(1.0,0.0,0.0,x,y + (8.0/3.0),z,radius);
+    if (redOn)
+		circulo(1.0,0.0,0.0,x,y + (8.0/3.0),z,radius);
+	else 
+		circulo(0.3,0.0,0.0,x,y + (8.0/3.0),z,radius);
 }
 void sistCoord(void)
 {
