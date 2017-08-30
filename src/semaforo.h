@@ -1,3 +1,4 @@
+
 #include <math.h>
 #define M_PI 3.14159265358979323846
 
@@ -53,14 +54,19 @@ void circulo(GLfloat red, GLfloat green, GLfloat blue, GLfloat x, GLfloat y,
 		GLfloat z, GLfloat radius) {
 
 	glColor3f(red,green,blue);
-	glBegin(GL_LINE_LOOP);
+	glBegin(GL_TRIANGLE_FAN);
 	int i;
-	for(i=0;i<100;i++)
-		glVertex3d(x + (radius * cos(i * 2.0 * M_PI / 100)),
-				y + (radius * sin(i * 2.0 * M_PI / 100)),
-				z - (radius * cos(i * 2.0 * M_PI / 100)));
+	int j;
+
+        for(i=0;i<100;i++)
+            glVertex3d(x + (radius * cos(i * 2.0 * M_PI / 100)) ,
+                    y + (radius * sin(i * 2.0 * M_PI / 100)),
+                    z - (radius * cos(i * 2.0 * M_PI / 100)));
 	glEnd();
 }
+
+
+
 
 void semaforo(void)
 {
@@ -72,10 +78,8 @@ void semaforo(void)
 
     // semaforo verde
     circulo(0.0,1.0,0.0,x,y,z,radius);
-
     // semaforo amarelo
     circulo(1.0,1.0,0.0,x,y + (4.0/3.0),z,radius);
-
     // semaforo vermelho
     circulo(1.0,0.0,0.0,x,y + (8.0/3.0),z,radius);
 }
