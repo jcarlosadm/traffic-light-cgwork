@@ -15,7 +15,7 @@
 //---------------------------------------------------------------------------
 #include "semaforo.h"
 
-float RotX = 0.0, RotY = 0.0;
+float RotX = 0.0, RotY = 0.0, RotZ = 0.0;
 int verSistCoord = 0;
 // window dim
 int nearV = -15;
@@ -49,6 +49,7 @@ void desenha() {
 	glPushMatrix();
 	glRotatef(RotX, 1.0, 0.0, 0.0);
 	glRotatef(RotY, 0.0, 1.0, 0.0);
+	glRotatef(RotZ, 0.0, 0.0, 1.0);
 
 	if (verSistCoord)
 		sistCoord();
@@ -81,6 +82,12 @@ void teclas_especiais(int key, int x, int y) {
 		break;
 	case GLUT_KEY_LEFT:
 		--RotY;
+		break;
+	case GLUT_KEY_PAGE_UP:
+		--RotZ;
+		break;
+	case GLUT_KEY_PAGE_DOWN:
+		++RotZ;
 		break;
 	case GLUT_KEY_F1:
 		verSistCoord = 1 - verSistCoord;
