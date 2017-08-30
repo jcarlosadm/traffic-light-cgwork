@@ -19,17 +19,17 @@
 #include "semaforo.h"
 
 // variaveis de controle de rotacao
-float RotX = 0.0, RotY = 0.0, RotZ = 0.0;
+float RotX = 0.0, RotY = 0.0;
 // controla se ativa a visualizacao do sistema de coordenadas
 int verSistCoord = 0;
 
 // Dimensiona a projecao
-int nearV = -15;
-int farV = 15;
-int leftV = -10;
-int rightV = 10;
-int upperV = 10;
-int bottomV = -10;
+float nearV = 15;
+float farV = 50;
+float leftV = -10;
+float rightV = 10;
+float upperV = 10;
+float bottomV = -10;
 
 // temporizador no semaforo
 unsigned int time;
@@ -43,7 +43,7 @@ void dimensionaJanela(int w, int h) {
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(leftV, rightV, bottomV, upperV, nearV, farV);
+	glFrustum(leftV, rightV, bottomV, upperV, nearV, farV);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -61,11 +61,15 @@ void initGL() {
  */
 void desenha() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glPushMatrix();
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(13.0, 4.0, 20,       // foco F(13, 4, 20),
+			  8.0, 4.0, 12.0,      // visada para (8, 4, 12)
+			  0.0, 1.0, 0.0);      // e vert.V(0, 1, 0)
 	// rotaciona
 	glRotatef(RotX, 1.0, 0.0, 0.0);
 	glRotatef(RotY, 0.0, 1.0, 0.0);
-	glRotatef(RotZ, 0.0, 0.0, 1.0);
 
 	// desenha sistema de coordenadas se ativo
 	if (verSistCoord)
@@ -74,7 +78,6 @@ void desenha() {
 	// desenha semaforo
 	semaforo();
 
-	glPopMatrix();
 	glutSwapBuffers();
 	
 }
@@ -93,22 +96,32 @@ void teclas(unsigned char key, int x, int y) {
 void teclas_especiais(int key, int x, int y) {
 	switch (key) {
 	case GLUT_KEY_UP:
-		++RotX;
+		upperV+=0.1;
+		bottomV+=0.1;
 		break;
 	case GLUT_KEY_DOWN:
-		--RotX;
-		break;
-	case GLUT_KEY_RIGHT:
-		++RotY;
+		upperV-=0.1;
+		bottomV-=0.1;
 		break;
 	case GLUT_KEY_LEFT:
+		leftV-=0.1;
+		rightV-=0.1;
+		break;
+	case GLUT_KEY_RIGHT:
+		leftV+=0.1;
+		rightV+=0.1;
+		break;
+	case GLUT_KEY_HOME:
+		++RotY;
+		break;
+	case GLUT_KEY_END:
 		--RotY;
 		break;
 	case GLUT_KEY_PAGE_UP:
-		--RotZ;
+		--RotX;
 		break;
 	case GLUT_KEY_PAGE_DOWN:
-		++RotZ;
+		++RotX;
 		break;
 	case GLUT_KEY_F1:
 		verSistCoord = 1 - verSistCoord;
@@ -119,7 +132,7 @@ void teclas_especiais(int key, int x, int y) {
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(leftV, rightV, bottomV, upperV, nearV, farV);
+	glFrustum(leftV, rightV, bottomV, upperV, nearV, farV);
 	glutPostRedisplay();
 }
 
@@ -157,12 +170,13 @@ void animation () {
 
 int main(int argc, char *argv[]) {
 		
-	puts("setas - gira (eixo x/y), pageup/pagedown - gira (eixo z), F1-mostra sist.coord., ESC-encerra");
+	puts("setas - move, pageup/pagedown - rotaciona(x), home/end -"
+			" rotaciona(y), F1-mostra sist.coord., ESC-encerra");
 
 	// prepara
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
-	glutInitWindowSize(500, 600);
+	glutInitWindowSize(600, 600);
 
 	glutCreateWindow("Semaforo");
 
