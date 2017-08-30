@@ -24,7 +24,7 @@ int leftV = -10;
 int rightV = 10;
 int upperV = 10;
 int bottomV = -10;
-uint time;
+unsigned int time;
 
 //---------------------------------------------------------------------------
 void dimensionaJanela(int w, int h) {
@@ -133,6 +133,8 @@ int main(int argc, char *argv[]) {
 	glutKeyboardFunc(teclas);
 	glutSpecialFunc(teclas_especiais);
 	time = glutGet(GLUT_ELAPSED_TIME);
+
+	// chama a func animation qd o glut n ta tratando os eventos
 	glutIdleFunc( animation );
 
 	
