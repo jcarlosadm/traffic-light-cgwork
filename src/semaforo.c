@@ -7,6 +7,7 @@
 #else
 
 #include <GL/glut.h>
+#include <unistd.h>
 
 #endif
 
@@ -23,6 +24,8 @@ int leftV = -10;
 int rightV = 10;
 int upperV = 10;
 int bottomV = -10;
+uint time;
+
 //---------------------------------------------------------------------------
 void dimensionaJanela(int w, int h) {
 	glViewport(0, 0, w, h);
@@ -37,6 +40,10 @@ void initGL() {
 	glEnable(GL_DEPTH_TEST);
 	//limpa-buffers e outras inicializacoes;
 }
+
+
+
+
 void desenha() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
@@ -50,6 +57,7 @@ void desenha() {
 
 	glPopMatrix();
 	glutSwapBuffers();
+	
 }
 void teclas(unsigned char key, int x, int y) {
 	switch (key) {
@@ -87,7 +95,31 @@ void teclas_especiais(int key, int x, int y) {
 	glutPostRedisplay();
 }
 
+void animation () {
+	
+		uint newTime = glutGet(GLUT_ELAPSED_TIME);
+		if (newTime - time < 1000) return;
+		time = newTime;
+		
+		if (redOn + yellowOn + greenOn == 0 || yellowOn == 1) {
+			yellowOn = 0;
+			redOn = 1;
+		} else if (redOn == 1) {
+			redOn = 0;
+			greenOn = 1;
+		} else if (greenOn == 1) {
+
+		greenOn = 0;
+		yellowOn = 1;
+	}
+	glutPostRedisplay();
+	
+}
+
+
+
 int main(int argc, char *argv[]) {
+		
 	puts("setas-gira, F1-mostra sist.coord., ESC-encerra");
 
 	glutInit(&argc, argv);
@@ -100,9 +132,11 @@ int main(int argc, char *argv[]) {
 	glutDisplayFunc(desenha);
 	glutKeyboardFunc(teclas);
 	glutSpecialFunc(teclas_especiais);
+	time = glutGet(GLUT_ELAPSED_TIME);
+	glutIdleFunc( animation );
 
+	
 	initGL();
-
 	glutMainLoop();
 	return (0);
 }
