@@ -104,21 +104,24 @@ void teclas_especiais(int key, int x, int y) {
 
 void animation () {
 	
-		uint newTime = glutGet(GLUT_ELAPSED_TIME);
-		if (newTime - time < 1000) return;
-		time = newTime;
-		
-		if (redOn + yellowOn + greenOn == 0 || yellowOn == 1) {
-			yellowOn = 0;
-			redOn = 1;
-		} else if (redOn == 1) {
-			redOn = 0;
-			greenOn = 1;
-		} else if (greenOn == 1) {
+	unsigned int newTime = glutGet(GLUT_ELAPSED_TIME);
 
+	if (newTime - time < 1000)
+		return;
+
+	time = newTime;
+		
+	if (redOn + yellowOn + greenOn == 0 || yellowOn == 1) {
+		yellowOn = 0;
+		redOn = 1;
+	} else if (redOn == 1) {
+		redOn = 0;
+		greenOn = 1;
+	} else if (greenOn == 1) {
 		greenOn = 0;
 		yellowOn = 1;
 	}
+
 	glutPostRedisplay();
 	
 }
