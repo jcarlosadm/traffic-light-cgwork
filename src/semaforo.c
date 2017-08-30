@@ -88,8 +88,25 @@ void teclas(unsigned char key, int x, int y) {
 	case 27:
 		exit(0);
 		break;
+	case 'a':
+		leftV+=0.1;
+		rightV-=0.1;
+		upperV-=0.1;
+		bottomV+=0.1;
+		break;
+	case 's':
+		leftV-=0.1;
+		rightV+=0.1;
+		upperV+=0.1;
+		bottomV-=0.1;
+		break;
 		//...
 	}
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glFrustum(leftV, rightV, bottomV, upperV, nearV, farV);
+	glutPostRedisplay();
 }
 
 // Trata das teclas especiais
@@ -171,7 +188,7 @@ void animation () {
 int main(int argc, char *argv[]) {
 		
 	puts("setas - move, pageup/pagedown - rotaciona(x), home/end -"
-			" rotaciona(y), F1-mostra sist.coord., ESC-encerra");
+			" rotaciona(y),\n a/s - zoom, F1-mostra sist.coord., ESC-encerra");
 
 	// prepara
 	glutInit(&argc, argv);
